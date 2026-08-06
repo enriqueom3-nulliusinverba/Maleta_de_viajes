@@ -1665,7 +1665,8 @@
       "DNI": true,
       "Bolsa móvil": false,
       "Escarpines": true,
-      "Prismáticos": true
+      "Prismáticos": true,
+      "linterna": true
     },
     "excluded": {
       "Cinturon": true,
