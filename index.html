@@ -474,6 +474,13 @@ h1{
   border:1px solid var(--line);
   border-radius:var(--radius);
   overflow:hidden;
+  transition:border-color 0.2s ease;
+}
+.category.cat-pending{
+  border-color:color-mix(in srgb, var(--warn) 40%, var(--line));
+}
+.category.cat-done{
+  border-color:color-mix(in srgb, var(--accent) 45%, var(--line));
 }
 .category summary{
   list-style:none;
@@ -484,8 +491,17 @@ h1{
   padding:0.85rem 1.1rem;
   font-family:var(--font-display);
   font-size:1.02rem;
+  transition:background 0.2s ease;
+}
+.category.cat-pending summary{
+  background:color-mix(in srgb, var(--warn) 7%, transparent);
+}
+.category.cat-done summary{
+  background:color-mix(in srgb, var(--accent) 9%, transparent);
 }
 .category summary::-webkit-details-marker{display:none;}
+.category.cat-pending summary .count{color:var(--warn);}
+.category.cat-done summary .count{color:var(--accent);}
 .category summary .count{
   font-family:var(--font-mono);
   font-size:0.78rem;
@@ -1377,6 +1393,8 @@ const showPackedState = savedProgress.showPacked || {};
 const showExcludedState = savedProgress.showExcluded || {};
 const qtyOverrides = savedProgress.qty || {};
 let editingQtyKey = null;
+const categoryOpenState = {};
+const categoryWasDone = {};
 
 function effQty(name, computedQty){
   return qtyOverrides[name] != null ? qtyOverrides[name] : computedQty;
@@ -1497,8 +1515,15 @@ function render(){
     if (packedRows.length) footerBtns.push(`<button type="button" class="show-packed-btn packed-tone" data-showpacked="${escapeAttr(cat)}">${showPacked ? 'Ocultar empaquetados' : `Mostrar empaquetados (${packedRows.length})`}</button>`);
     if (excludedRows.length) footerBtns.push(`<button type="button" class="show-packed-btn excluded-tone" data-showexcluded="${escapeAttr(cat)}">${showExcluded ? 'Ocultar descartados' : `Mostrar descartados (${excludedRows.length})`}</button>`);
 
+    const resolvedCount = packedRows.length + excludedRows.length;
+    const catDone = rows.length > 0 && resolvedCount === rows.length;
+    if (catDone && !categoryWasDone[cat]) categoryOpenState[cat] = false;
+    categoryWasDone[cat] = catDone;
+    const isOpen = categoryOpenState[cat] !== undefined ? categoryOpenState[cat] : true;
+    const stateClass = catDone ? 'cat-done' : 'cat-pending';
+
     return `
-      <details class="category" open>
+      <details class="category ${stateClass}" ${isOpen ? 'open' : ''} data-cat="${escapeAttr(cat)}">
         <summary>
           <span>${escapeHtml(cat)}</span>
           <span style="display:flex;align-items:center;">
@@ -1513,6 +1538,12 @@ function render(){
       </details>
     `;
   }).join('');
+
+  els.categories.querySelectorAll('details.category').forEach(detailsEl => {
+    detailsEl.addEventListener('toggle', () => {
+      categoryOpenState[detailsEl.getAttribute('data-cat')] = detailsEl.open;
+    });
+  });
 
   els.categories.querySelectorAll('[data-toggle]').forEach(cb => {
     cb.addEventListener('change', e => {
