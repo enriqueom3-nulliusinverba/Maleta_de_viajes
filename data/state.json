@@ -1674,7 +1674,8 @@
       "Gafas de sol": true,
       "Paraguas": true,
       "Cafe": false,
-      "Especiero": false
+      "Especiero": false,
+      "Chanclas": true
     },
     "excluded": {
       "Cinturon": true,
