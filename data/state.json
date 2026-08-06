@@ -1716,7 +1716,8 @@
     },
     "showPacked": {
       "Aseo": false,
-      "Aventura": true
+      "Aventura": true,
+      "Digital": true
     },
     "showExcluded": {
       "Aseo": false,
