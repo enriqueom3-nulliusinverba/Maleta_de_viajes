@@ -1654,7 +1654,9 @@
       "Pasta dientes": true,
       "Tapones": true,
       "Tapones loop": true,
-      "Toalla baño": true
+      "Toalla baño": true,
+      "Toalla extra": false,
+      "toallitas humedas": true
     },
     "excluded": {
       "Cinturon": true,
@@ -1662,7 +1664,8 @@
       "Acondicionador": true,
       "Champu": true,
       "Crema sol": true,
-      "Gel": true
+      "Gel": true,
+      "Toalla extra": true
     },
     "qty": {
       "Camiseta deporte": 2,
