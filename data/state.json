@@ -1637,7 +1637,8 @@
       "Deportivas": true,
       "Gorra": true,
       "Pantalones vaqueros": false,
-      "Pijama": true
+      "Pijama": true,
+      "Sudadera & Polar": true
     },
     "excluded": {
       "Cinturon": true,
