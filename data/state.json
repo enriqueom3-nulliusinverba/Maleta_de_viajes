@@ -1648,14 +1648,17 @@
       "Colonia": true,
       "Compeed ampollas": true,
       "Crema sol": false,
-      "Desodorante": true
+      "Desodorante": true,
+      "Gel": false,
+      "Goma pelo": true
     },
     "excluded": {
       "Cinturon": true,
       "Pantalones vaqueros": true,
       "Acondicionador": true,
       "Champu": true,
-      "Crema sol": true
+      "Crema sol": true,
+      "Gel": true
     },
     "qty": {
       "Camiseta deporte": 2,
