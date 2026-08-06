@@ -1675,7 +1675,8 @@
       "Paraguas": true,
       "Cafe": false,
       "Especiero": false,
-      "Chanclas": true
+      "Chanclas": true,
+      "Aftersun": false
     },
     "excluded": {
       "Cinturon": true,
@@ -1689,7 +1690,8 @@
       "Almohada viaje (funda)": true,
       "Candado": true,
       "Cafe": true,
-      "Especiero": true
+      "Especiero": true,
+      "Aftersun": true
     },
     "qty": {
       "Camiseta deporte": 2,
