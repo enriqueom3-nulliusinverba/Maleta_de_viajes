@@ -1625,7 +1625,9 @@
     }
   ],
   "progress": {
-    "packed": {},
+    "packed": {
+      "Chromecast": true
+    },
     "excluded": {},
     "qty": {},
     "showPacked": {},
