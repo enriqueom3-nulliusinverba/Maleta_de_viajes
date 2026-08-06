@@ -1678,7 +1678,10 @@
       "Chanclas": true,
       "Aftersun": false,
       "Antimosquitos": true,
-      "Betadine": false
+      "Betadine": false,
+      "Gel hidroalcohólico": true,
+      "Inhalador": true,
+      "Mascarillas": true
     },
     "excluded": {
       "Cinturon": true,
