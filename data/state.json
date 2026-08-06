@@ -1666,7 +1666,9 @@
       "Bolsa móvil": false,
       "Escarpines": true,
       "Prismáticos": true,
-      "linterna": true
+      "linterna": true,
+      "Almohada viaje (funda)": false,
+      "Botella": true
     },
     "excluded": {
       "Cinturon": true,
@@ -1676,7 +1678,8 @@
       "Crema sol": true,
       "Gel": true,
       "Toalla extra": true,
-      "Bolsa móvil": true
+      "Bolsa móvil": true,
+      "Almohada viaje (funda)": true
     },
     "qty": {
       "Camiseta deporte": 2,
