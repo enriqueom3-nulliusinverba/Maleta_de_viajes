@@ -909,6 +909,26 @@ footer{
   color:var(--ink-dim);
   font-family:var(--font-mono);
 }
+footer p{margin:0 0 0.5rem;}
+footer p:last-child{margin-bottom:0;}
+.sync-status{
+  display:flex;
+  align-items:center;
+  gap:0.4rem;
+  min-height:1em;
+}
+.sync-status:empty{display:none;}
+.sync-status::before{
+  content:"";
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--ink-dim);
+  flex:none;
+}
+.sync-status.syncing::before{background:var(--rain);}
+.sync-status.synced::before{background:var(--accent);}
+.sync-status.offline::before{background:var(--ink-dim);}
+.sync-status.error::before{background:var(--warn);}
 
 /* ---- Responsive: smartphone ---- */
 @media (max-width:640px){
@@ -1210,7 +1230,10 @@ footer{
     </div>
   </details>
 
-  <footer>Fórmula por objeto: unidades fijas + (uso por día × nº de días, redondeado hacia arriba). Un objeto solo entra si cumple todas sus condiciones de destino, alojamiento, tipo de viaje, lluvia y temperatura.</footer>
+  <footer>
+    <p>Fórmula por objeto: unidades fijas + (uso por día × nº de días, redondeado hacia arriba). Un objeto solo entra si cumple todas sus condiciones de destino, alojamiento, tipo de viaje, lluvia y temperatura.</p>
+    <p class="sync-status" id="sync-status"></p>
+  </footer>
 </div>
 
 <script>
@@ -1271,6 +1294,7 @@ let itemsState = loadItems();
 
 function saveItems(){
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(itemsState)); } catch (e) {}
+  scheduleCloudSync();
 }
 
 const els = {
@@ -1338,6 +1362,7 @@ function saveProgress(){
       showExcluded: showExcludedState,
     }));
   } catch (e) {}
+  scheduleCloudSync();
 }
 
 const savedProgress = loadProgress();
@@ -1570,6 +1595,7 @@ function saveTripFields(){
     tripFieldIds.forEach(id => { data[id] = document.getElementById(id).value; });
     localStorage.setItem(TRIP_KEY, JSON.stringify(data));
   } catch (e) {}
+  scheduleCloudSync();
 }
 
 function loadTripFields(){
@@ -1593,6 +1619,131 @@ loadTripFields();
   el.addEventListener('input', saveTripFields);
   el.addEventListener('change', saveTripFields);
 });
+
+/* ---- Sincronización entre dispositivos (GitHub vía /api/state) ---- */
+let cloudSyncTimer = null;
+let cloudSyncInFlight = false;
+let cloudAvailable = true;
+
+function getFullState(){
+  const trip = {};
+  tripFieldIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) trip[id] = el.value;
+  });
+  return {
+    items: itemsState,
+    progress: {
+      packed: packedState,
+      excluded: excludedState,
+      qty: qtyOverrides,
+      showPacked: showPackedState,
+      showExcluded: showExcludedState,
+    },
+    trip,
+  };
+}
+
+function applyFullState(state){
+  if (!state) return;
+  if (Array.isArray(state.items) && state.items.length) {
+    itemsState = state.items;
+  }
+  if (state.progress) {
+    Object.keys(packedState).forEach(k => delete packedState[k]);
+    Object.assign(packedState, state.progress.packed || {});
+    Object.keys(excludedState).forEach(k => delete excludedState[k]);
+    Object.assign(excludedState, state.progress.excluded || {});
+    Object.keys(qtyOverrides).forEach(k => delete qtyOverrides[k]);
+    Object.assign(qtyOverrides, state.progress.qty || {});
+    Object.keys(showPackedState).forEach(k => delete showPackedState[k]);
+    Object.assign(showPackedState, state.progress.showPacked || {});
+    Object.keys(showExcludedState).forEach(k => delete showExcludedState[k]);
+    Object.assign(showExcludedState, state.progress.showExcluded || {});
+  }
+  if (state.trip) {
+    tripFieldIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && state.trip[id] !== undefined && state.trip[id] !== '') el.value = state.trip[id];
+    });
+  }
+}
+
+function setSyncStatus(status){
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  el.className = 'sync-status ' + status;
+  el.textContent = {
+    syncing: 'Sincronizando…',
+    synced: 'Sincronizado en la nube',
+    offline: 'Sin conexión — guardado solo en este dispositivo',
+    error: 'Error al sincronizar con la nube',
+  }[status] || '';
+}
+
+async function cloudLoad(){
+  try {
+    const r = await fetch('/api/state');
+    if (!r.ok) { cloudAvailable = false; setSyncStatus('offline'); return; }
+    const json = await r.json();
+    if (json && json.data) {
+      applyFullState(json.data);
+      saveItemsLocalOnly();
+      saveProgressLocalOnly();
+      saveTripFieldsLocalOnly();
+      render();
+      renderEditor();
+    }
+    setSyncStatus('synced');
+  } catch (e) {
+    cloudAvailable = false;
+    setSyncStatus('offline');
+  }
+}
+
+function saveItemsLocalOnly(){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(itemsState)); } catch (e) {}
+}
+function saveProgressLocalOnly(){
+  try {
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify({
+      packed: packedState, excluded: excludedState, qty: qtyOverrides,
+      showPacked: showPackedState, showExcluded: showExcludedState,
+    }));
+  } catch (e) {}
+}
+function saveTripFieldsLocalOnly(){
+  try {
+    const data = {};
+    tripFieldIds.forEach(id => { const el = document.getElementById(id); if (el) data[id] = el.value; });
+    localStorage.setItem(TRIP_KEY, JSON.stringify(data));
+  } catch (e) {}
+}
+
+function scheduleCloudSync(){
+  if (!cloudAvailable) return;
+  clearTimeout(cloudSyncTimer);
+  setSyncStatus('syncing');
+  cloudSyncTimer = setTimeout(async () => {
+    if (cloudSyncInFlight) { scheduleCloudSync(); return; }
+    cloudSyncInFlight = true;
+    try {
+      const r = await fetch('/api/state', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(getFullState()),
+      });
+      if (!r.ok) throw new Error('sync failed');
+      setSyncStatus('synced');
+    } catch (e) {
+      setSyncStatus('error');
+    } finally {
+      cloudSyncInFlight = false;
+    }
+  }, 900);
+}
+
+cloudLoad();
 
 /* ---- Búsqueda de previsión (ventana emergente pequeña) ---- */
 const MONTHS_ES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
