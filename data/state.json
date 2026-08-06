@@ -1689,7 +1689,8 @@
       "Med | Lactosa": true,
       "Med | Omeprazol": true,
       "Termómetro": false,
-      "Botas montaña": true
+      "Botas montaña": true,
+      "Maquinilla afeitar": true
     },
     "excluded": {
       "Cinturon": true,
