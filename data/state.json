@@ -1635,10 +1635,13 @@
       "Chubasquero": true,
       "Cinturon": false,
       "Deportivas": true,
-      "Gorra": true
+      "Gorra": true,
+      "Pantalones vaqueros": false,
+      "Pijama": true
     },
     "excluded": {
-      "Cinturon": true
+      "Cinturon": true,
+      "Pantalones vaqueros": true
     },
     "qty": {
       "Camiseta deporte": 2,
