@@ -7,7 +7,5 @@
     "showPacked": {},
     "showExcluded": {}
   },
-  "trip": {
-    "test": "conexion-ok"
-  }
+  "trip": {}
 }
