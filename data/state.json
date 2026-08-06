@@ -1632,7 +1632,9 @@
       "Camiseta": true
     },
     "excluded": {},
-    "qty": {},
+    "qty": {
+      "Camiseta deporte": 5
+    },
     "showPacked": {},
     "showExcluded": {}
   },
