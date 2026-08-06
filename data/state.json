@@ -1668,7 +1668,9 @@
       "Prismáticos": true,
       "linterna": true,
       "Almohada viaje (funda)": false,
-      "Botella": true
+      "Botella": true,
+      "Candado": false,
+      "Cartera": true
     },
     "excluded": {
       "Cinturon": true,
@@ -1679,7 +1681,8 @@
       "Gel": true,
       "Toalla extra": true,
       "Bolsa móvil": true,
-      "Almohada viaje (funda)": true
+      "Almohada viaje (funda)": true,
+      "Candado": true
     },
     "qty": {
       "Camiseta deporte": 2,
