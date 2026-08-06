@@ -1650,7 +1650,11 @@
       "Crema sol": false,
       "Desodorante": true,
       "Gel": false,
-      "Goma pelo": true
+      "Goma pelo": true,
+      "Pasta dientes": true,
+      "Tapones": true,
+      "Tapones loop": true,
+      "Toalla baño": true
     },
     "excluded": {
       "Cinturon": true,
