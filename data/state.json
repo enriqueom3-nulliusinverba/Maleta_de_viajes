@@ -1648,7 +1648,8 @@
     "excluded": {
       "Cinturon": true,
       "Pantalones vaqueros": true,
-      "Acondicionador": true
+      "Acondicionador": true,
+      "Champu": true
     },
     "qty": {
       "Camiseta deporte": 2,
