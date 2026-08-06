@@ -1686,7 +1686,8 @@
       "Med | Dormir": true,
       "Med | Ibuprofeno": true,
       "Med | Lactosa": true,
-      "Med | Omeprazol": true
+      "Med | Omeprazol": true,
+      "Termómetro": false
     },
     "excluded": {
       "Cinturon": true,
@@ -1702,7 +1703,8 @@
       "Cafe": true,
       "Especiero": true,
       "Aftersun": true,
-      "Betadine": true
+      "Betadine": true,
+      "Termómetro": true
     },
     "qty": {
       "Camiseta deporte": 2,
