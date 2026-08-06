@@ -1687,7 +1687,8 @@
       "Med | Ibuprofeno": true,
       "Med | Lactosa": true,
       "Med | Omeprazol": true,
-      "Termómetro": false
+      "Termómetro": false,
+      "Botas montaña": true
     },
     "excluded": {
       "Cinturon": true,
