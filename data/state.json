@@ -1670,7 +1670,9 @@
       "Almohada viaje (funda)": false,
       "Botella": true,
       "Candado": false,
-      "Cartera": true
+      "Cartera": true,
+      "Gafas de sol": true,
+      "Paraguas": true
     },
     "excluded": {
       "Cinturon": true,
