@@ -1643,7 +1643,7 @@
       "Antifaz": true,
       "Cacao labios": true,
       "Cepillo dientes": true,
-      "Champu": true
+      "Champu": false
     },
     "excluded": {
       "Cinturon": true,
