@@ -1717,7 +1717,7 @@
     "showPacked": {
       "Aseo": false,
       "Aventura": true,
-      "Digital": true
+      "Digital": false
     },
     "showExcluded": {
       "Aseo": false,
