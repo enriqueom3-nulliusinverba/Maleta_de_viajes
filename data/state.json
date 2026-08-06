@@ -1677,7 +1677,8 @@
       "Especiero": false,
       "Chanclas": true,
       "Aftersun": false,
-      "Antimosquitos": true
+      "Antimosquitos": true,
+      "Betadine": false
     },
     "excluded": {
       "Cinturon": true,
@@ -1692,7 +1693,8 @@
       "Candado": true,
       "Cafe": true,
       "Especiero": true,
-      "Aftersun": true
+      "Aftersun": true,
+      "Betadine": true
     },
     "qty": {
       "Camiseta deporte": 2,
