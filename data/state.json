@@ -1644,7 +1644,9 @@
       "Cacao labios": true,
       "Cepillo dientes": true,
       "Champu": false,
-      "Chubasquero do pito": true
+      "Chubasquero do pito": true,
+      "Colonia": true,
+      "Compeed ampollas": true
     },
     "excluded": {
       "Cinturon": true,
