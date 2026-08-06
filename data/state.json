@@ -1676,7 +1676,8 @@
       "Cafe": false,
       "Especiero": false,
       "Chanclas": true,
-      "Aftersun": false
+      "Aftersun": false,
+      "Antimosquitos": true
     },
     "excluded": {
       "Cinturon": true,
