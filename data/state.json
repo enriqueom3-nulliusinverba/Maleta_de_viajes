@@ -1659,7 +1659,10 @@
       "toallitas humedas": true,
       "Auriculares": true,
       "Cargador USB C": true,
-      "Power hub": true
+      "Power hub": true,
+      "Carnet conducir": true,
+      "Credit card": true,
+      "DNI": true
     },
     "excluded": {
       "Cinturon": true,
