@@ -1690,7 +1690,8 @@
       "Med | Omeprazol": true,
       "Termómetro": false,
       "Botas montaña": true,
-      "Maquinilla afeitar": true
+      "Maquinilla afeitar": true,
+      "Ebook": true
     },
     "excluded": {
       "Cinturon": true,
