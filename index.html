@@ -413,7 +413,12 @@ h1{
   gap:0.6rem;
   flex:1;
 }
-.export-btn{
+.summary-actions{
+  display:flex;
+  gap:0.6rem;
+  flex:none;
+}
+.export-btn,.reset-btn{
   display:flex;
   align-items:center;
   gap:0.5rem;
@@ -422,7 +427,7 @@ h1{
   font-size:0.85rem;
   flex:none;
 }
-.export-btn svg{
+.export-btn svg,.reset-btn svg{
   width:15px;height:15px;
   stroke:currentColor;
   fill:none;
@@ -918,7 +923,8 @@ footer{
   .summary-row{flex-direction:column;align-items:stretch;}
   .summary{gap:0.45rem;}
   .chip{padding:0.42rem 0.7rem;font-size:0.78rem;}
-  .export-btn{justify-content:center;}
+  .summary-actions{flex-direction:column;}
+  .export-btn,.reset-btn{justify-content:center;}
   .category summary{padding:0.75rem 0.9rem;font-size:0.95rem;}
   .item-row{
     flex-wrap:wrap;
@@ -933,11 +939,86 @@ footer{
   .add-grid{grid-template-columns:1fr;}
   .add-conditions{gap:0.6rem 1rem;}
 }
+
+/* ---- Lock screen ---- */
+#lock-screen{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--bg);
+  padding:1.5rem;
+}
+.lock-card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:var(--shadow-panel);
+  padding:2.25rem 1.9rem;
+  max-width:320px;
+  width:100%;
+  text-align:center;
+}
+.lock-card .lock-icon{
+  width:38px;height:38px;
+  margin:0 auto 1.1rem;
+  color:var(--accent);
+}
+.lock-card h2{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:1.2rem;
+  margin:0 0 0.4rem;
+}
+.lock-card p{
+  color:var(--ink-dim);
+  font-size:0.85rem;
+  margin:0 0 1.4rem;
+}
+.lock-form{display:flex;flex-direction:column;gap:0.8rem;}
+.lock-form input{
+  font-family:var(--font-body);
+  font-size:1rem;
+  padding:0.7rem 0.9rem;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--bg);
+  color:var(--ink);
+  text-align:center;
+  width:100%;
+  box-sizing:border-box;
+}
+.lock-form input:focus{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-soft);
+}
+.lock-error{
+  color:var(--warn);
+  font-size:0.8rem;
+  min-height:1.1em;
+  margin:0;
+}
 </style>
 
 <canvas id="leaves-bg" aria-hidden="true"></canvas>
 
-<div class="wrap">
+<div id="lock-screen">
+  <div class="lock-card">
+    <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+    <h2>Maleta de viaje</h2>
+    <p>Introduce la contraseña para ver el contenido.</p>
+    <form class="lock-form" id="lock-form" autocomplete="off">
+      <input type="password" id="lock-input" placeholder="Contraseña" autocomplete="off">
+      <button type="submit" class="btn primary">Entrar</button>
+      <p class="lock-error" id="lock-error"></p>
+    </form>
+  </div>
+</div>
+
+<div class="wrap" id="app-wrap" style="display:none;">
   <header class="page-head">
     <p class="eyebrow">Maleta de viaje</p>
     <h1>Qué meter en la maleta</h1>
@@ -1069,10 +1150,16 @@ footer{
 
   <div class="summary-row">
     <div class="summary" id="summary"></div>
-    <button type="button" class="btn primary export-btn" id="export-btn">
-      <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
-      Exportar maleta
-    </button>
+    <div class="summary-actions">
+      <button type="button" class="btn ghost reset-btn" id="reset-trip-btn" title="Borra lo empaquetado/descartado y las cantidades editadas para empezar de cero">
+        <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        Nuevo viaje
+      </button>
+      <button type="button" class="btn primary export-btn" id="export-btn">
+        <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+        Exportar maleta
+      </button>
+    </div>
   </div>
 
   <div class="categories" id="categories"></div>
@@ -1127,6 +1214,30 @@ footer{
 </div>
 
 <script>
+/* ---- Bloqueo con contraseña ---- */
+(function(){
+  const LOCK_PASSWORD = 'Abretesesamo';
+  const lockScreen = document.getElementById('lock-screen');
+  const lockForm = document.getElementById('lock-form');
+  const lockInput = document.getElementById('lock-input');
+  const lockError = document.getElementById('lock-error');
+  const appWrap = document.getElementById('app-wrap');
+
+  lockInput.focus();
+
+  lockForm.addEventListener('submit', e => {
+    e.preventDefault();
+    if (lockInput.value === LOCK_PASSWORD) {
+      lockScreen.remove();
+      appWrap.style.display = '';
+    } else {
+      lockError.textContent = 'Contraseña incorrecta.';
+      lockInput.value = '';
+      lockInput.focus();
+    }
+  });
+})();
+
 const BASE_ITEMS = [{"name":"Auriculares","category":"Digital","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Dron","category":"Opcional","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["OCIO"]},{"name":"Ebook","category":"Digital","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Movil","category":"Digital","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Reloj","category":"Digital","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Abrigo (plumas)","category":"Ropa","parte":"Arriba","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":10,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Acondicionador","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":["OTHER"],"tipoViaje":[]},{"name":"Adaptador corriente","category":"Digital","parte":"","fijo":1,"porDia":0,"location":["LATAM","USA"],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Cartera","category":"Varios","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Aftersun","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":30,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Cepillo dientes","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Almohada viaje","category":"Varios","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Champu","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Antifaz","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Chanclas","category":"Ropa","parte":"Pies","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Antimosquitos","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":35,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Pantalones chandal","category":"Ropa","parte":"Abajo","fijo":1,"porDia":0.1,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["AVENTURA NATURALEZA","AVENTURA URBANA","OCIO"]},{"name":"Bañador","category":"Ropa","parte":"Abajo","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":30,"reqRain":[],"accomodation":[],"tipoViaje":["AVENTURA NATURALEZA","OCIO"]},{"name":"Pantalones chinos","category":"Ropa","parte":"Abajo","fijo":1,"porDia":0.1,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["TRABAJO"]},{"name":"Botas montaña","category":"Aventura","parte":"Pies","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["AVENTURA NATURALEZA","OCIO"]},{"name":"Chinos cortos","category":"Ropa","parte":"","fijo":1,"porDia":0.25,"location":[],"minDias":null,"minReq":null,"maxReq":30,"reqRain":[],"accomodation":[],"tipoViaje":["AVENTURA NATURALEZA","OCIO"]},{"name":"Botella","category":"Varios","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Chromecast","category":"Opcional","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["OCIO"]},{"name":"Bufanda/Braga","category":"Ropa","parte":"Arriba","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":7,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Chubasquero","category":"Ropa","parte":"Arriba","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":["A LOT","MED"],"accomodation":[],"tipoViaje":[]},{"name":"Cacao labios","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Chubasquero do pito","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Cafe","category":"Comida","parte":"","fijo":0,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["AVENTURA NATURALEZA"]},{"name":"Cinturon","category":"Ropa","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Calcetienes termicos","category":"Ropa","parte":"","fijo":2,"porDia":1,"location":[],"minDias":null,"minReq":7,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Colonia","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Calcetines","category":"Ropa","parte":"Abajo","fijo":2,"porDia":1,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Compeed ampollas","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["AVENTURA NATURALEZA","AVENTURA URBANA"]},{"name":"Calzoncillos","category":"Ropa","parte":"Abajo","fijo":2,"porDia":1,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Credit card","category":"Documentación","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Camisa de trabajo","category":"Ropa","parte":"Arriba","fijo":1,"porDia":1,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["TRABAJO"]},{"name":"Crema sol","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":35,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Camiseta","category":"Ropa","parte":"Arriba","fijo":1,"porDia":1,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Deportivas","category":"Ropa","parte":"Pies","fijo":1,"porDia":0.25,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Camiseta deporte","category":"Ropa","parte":"Arriba","fijo":1,"porDia":0.5,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["AVENTURA NATURALEZA","OCIO"]},{"name":"Desodorante","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Camiseta térmica","category":"Ropa","parte":"Arriba","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":5,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"DNI","category":"Documentación","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Candado","category":"Varios","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["AVENTURA NATURALEZA","AVENTURA URBANA","OCIO"]},{"name":"Escarpines","category":"Aventura","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":35,"reqRain":[],"accomodation":[],"tipoViaje":["AVENTURA NATURALEZA"]},{"name":"Especiero","category":"Comida","parte":"","fijo":0,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["AVENTURA NATURALEZA"]},{"name":"Cargador USB C","category":"Digital","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"ESTA USA","category":"Documentación","parte":"","fijo":1,"porDia":0,"location":["USA"],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Gafas de sol","category":"Varios","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Gafas ver","category":"Varios","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Gel","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":["OTHER"],"tipoViaje":[]},{"name":"Carnet conducir","category":"Documentación","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Gel hidroalcohólico","category":"Botiquin","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Carnet internacional conducir","category":"Documentación","parte":"","fijo":1,"porDia":0,"location":["LATAM","USA"],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Goma pelo","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Gorra","category":"Ropa","parte":"Arriba","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":30,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Gorro","category":"Ropa","parte":"Arriba","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":7,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Guantes","category":"Ropa","parte":"Arriba","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":7,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Inhalador","category":"Botiquin","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Ipad","category":"Digital","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["OCIO","TRABAJO"]},{"name":"Jersey","category":"Ropa","parte":"Arriba","fijo":1,"porDia":0.2,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["TRABAJO"]},{"name":"linterna","category":"Aventura","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["AVENTURA NATURALEZA"]},{"name":"Maquinilla afeitar","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":5,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Zapatos","category":"Ropa","parte":"Pies","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["TRABAJO"]},{"name":"Mascarillas","category":"Botiquin","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Med | Omeprazol","category":"Botiquin","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["AVENTURA NATURALEZA","AVENTURA URBANA","OCIO","TRABAJO"]},{"name":"Pantalón térmico","category":"Ropa","parte":"Abajo","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":5,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Paraguas","category":"Varios","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":["A LOT","FEW","MED"],"accomodation":[],"tipoViaje":[]},{"name":"Pasaporte","category":"Documentación","parte":"","fijo":1,"porDia":0,"location":["LATAM","USA"],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Pasta dientes","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Pijama","category":"Ropa","parte":"Arriba","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Polos","category":"Ropa","parte":"","fijo":0,"porDia":0.2,"location":[],"minDias":null,"minReq":null,"maxReq":30,"reqRain":[],"accomodation":[],"tipoViaje":["OCIO","TRABAJO"]},{"name":"Portatil","category":"Digital","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["TRABAJO"]},{"name":"Repelente insectos","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":["LATAM"],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["AVENTURA NATURALEZA","AVENTURA URBANA"]},{"name":"Sabanas x2","category":"Aventura","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":["CAMPING"],"tipoViaje":[]},{"name":"Saco de dormir","category":"Aventura","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":["CAMPING"],"tipoViaje":[]},{"name":"Sudadera & Polar","category":"Ropa","parte":"Arriba","fijo":1,"porDia":0.2,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Tapones","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Tapones loop","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Tarjeta sanitaria Euro","category":"Documentación","parte":"","fijo":1,"porDia":0,"location":["EUROPE"],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Termómetro","category":"Botiquin","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Toalla baño","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"toallitas humedas","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Tupper","category":"Varios","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["OCIO"]},{"name":"Pantalones vaqueros","category":"Ropa","parte":"Abajo","fijo":1,"porDia":0.1,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Zapatillas paño","category":"Ropa","parte":"Pies","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":5,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Toalla extra","category":"Aseo","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":["OTHER"],"tipoViaje":[]},{"name":"Camisa de fiesta","category":"Ropa","parte":"Arriba","fijo":1,"porDia":0.4,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["AVENTURA URBANA","OCIO"]},{"name":"Cargador USB A","category":"Digital","parte":"","fijo":1,"porDia":0,"location":[],"minDias":14,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Abrigo (Ligero)","category":"Ropa","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":15,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Med | Alergia","category":"Botiquin","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Med | Lactosa","category":"Botiquin","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Med | Ibuprofeno","category":"Botiquin","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["AVENTURA NATURALEZA","AVENTURA URBANA","OCIO","TRABAJO"]},{"name":"Med | Dormir","category":"Botiquin","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["AVENTURA NATURALEZA","AVENTURA URBANA","OCIO","TRABAJO"]},{"name":"Cargador reloj","category":"Digital","parte":"","fijo":1,"porDia":0,"location":[],"minDias":14,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Cargador | Afeitar","category":"Digital","parte":"","fijo":1,"porDia":0,"location":[],"minDias":14,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Power hub","category":"Digital","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Almohada viaje (funda)","category":"Varios","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Prismáticos","category":"Aventura","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":["AVENTURA NATURALEZA"]},{"name":"Betadine","category":"Botiquin","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]},{"name":"Bolsa móvil","category":"Aventura","parte":"","fijo":1,"porDia":0,"location":[],"minDias":null,"minReq":null,"maxReq":null,"reqRain":[],"accomodation":[],"tipoViaje":[]}];
 
 const CATEGORY_ORDER = ['Ropa','Aseo','Botiquin','Digital','Documentación','Aventura','Varios','Comida','Opcional'];
@@ -1788,6 +1899,19 @@ configCollapseBtn.addEventListener('click', () => {
   const collapsed = configPanelEl.classList.toggle('collapsed');
   configCollapseBtn.setAttribute('aria-expanded', String(!collapsed));
   configCollapseBtn.title = collapsed ? 'Expandir sección' : 'Contraer sección';
+});
+
+document.getElementById('reset-trip-btn').addEventListener('click', () => {
+  const ok = window.confirm('¿Empezar un nuevo viaje? Se borrará lo empaquetado, descartado y las cantidades editadas de este viaje. El catálogo de objetos no se toca.');
+  if (!ok) return;
+  Object.keys(packedState).forEach(k => delete packedState[k]);
+  Object.keys(excludedState).forEach(k => delete excludedState[k]);
+  Object.keys(qtyOverrides).forEach(k => delete qtyOverrides[k]);
+  Object.keys(showPackedState).forEach(k => delete showPackedState[k]);
+  Object.keys(showExcludedState).forEach(k => delete showExcludedState[k]);
+  editingQtyKey = null;
+  saveProgress();
+  render();
 });
 
 document.getElementById('export-btn').addEventListener('click', async () => {
