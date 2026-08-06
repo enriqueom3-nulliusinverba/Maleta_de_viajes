@@ -135,12 +135,46 @@ h1{
 }
 .config-head{
   display:flex;
-  align-items:baseline;
+  align-items:flex-start;
   justify-content:space-between;
   gap:1rem;
   flex-wrap:wrap;
-  margin-bottom:1.6rem;
 }
+.config-body{
+  margin-top:1.6rem;
+  display:grid;
+  grid-template-rows:1fr;
+  transition:grid-template-rows 0.25s ease, opacity 0.2s ease, margin-top 0.25s ease;
+}
+.config-body > .field-groups{overflow:hidden;min-height:0;}
+.panel.config.collapsed .config-body{
+  grid-template-rows:0fr;
+  opacity:0;
+  margin-top:0;
+}
+.config-collapse-btn{
+  flex:none;
+  width:32px;height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:var(--panel);
+  color:var(--ink-dim);
+  cursor:pointer;
+  transition:transform 0.25s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.config-collapse-btn:hover{color:var(--accent);border-color:var(--accent);}
+.config-collapse-btn svg{
+  width:16px;height:16px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.panel.config.collapsed .config-collapse-btn svg{transform:rotate(-90deg);}
 .config h2{
   font-family:var(--font-display);
   font-weight:700;
@@ -323,12 +357,79 @@ h1{
   flex:none;
 }
 
+/* ---- Status banner ---- */
+.status-banner{
+  display:flex;
+  align-items:center;
+  gap:0.65rem;
+  padding:0.8rem 1.1rem;
+  border-radius:10px;
+  font-size:0.88rem;
+  font-weight:600;
+  margin-bottom:1.25rem;
+  border:1px solid transparent;
+  transition:background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.status-banner:empty{display:none;}
+.status-banner svg{
+  width:18px;height:18px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  flex:none;
+}
+.status-banner .status-count{
+  margin-left:auto;
+  font-family:var(--font-mono);
+  font-variant-numeric:tabular-nums;
+  font-weight:700;
+  white-space:nowrap;
+}
+.status-banner.pending{
+  background:var(--warn-soft);
+  border-color:color-mix(in srgb, var(--warn) 35%, transparent);
+  color:var(--warn);
+}
+.status-banner.done{
+  background:var(--accent-soft);
+  border-color:color-mix(in srgb, var(--accent) 40%, transparent);
+  color:var(--accent);
+}
+
 /* ---- Summary strip ---- */
+.summary-row{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:1rem;
+  flex-wrap:wrap;
+  margin-bottom:1.75rem;
+}
 .summary{
   display:flex;
   flex-wrap:wrap;
   gap:0.6rem;
-  margin-bottom:1.75rem;
+  flex:1;
+}
+.export-btn{
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+  white-space:nowrap;
+  padding:0.55rem 1rem;
+  font-size:0.85rem;
+  flex:none;
+}
+.export-btn svg{
+  width:15px;height:15px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  flex:none;
 }
 .chip{
   display:flex;
@@ -406,7 +507,6 @@ h1{
 .show-packed-btn{
   background:transparent;
   border:none;
-  color:var(--accent);
   font-family:var(--font-body);
   font-size:0.78rem;
   font-weight:600;
@@ -414,6 +514,8 @@ h1{
   cursor:pointer;
   padding:0.3rem 0.6rem;
 }
+.show-packed-btn.packed-tone{color:var(--accent);}
+.show-packed-btn.excluded-tone{color:var(--warn);}
 .show-packed-btn:hover{text-decoration:underline;}
 .item-row{
   display:flex;
@@ -453,10 +555,11 @@ h1{
   color:var(--ink-dim);
 }
 .item-name{flex:1;min-width:0;}
-.item-part{
-  font-size:0.72rem;
-  color:var(--ink-dim);
-  font-family:var(--font-mono);
+.item-qty-wrap{
+  display:flex;
+  align-items:center;
+  gap:0.3rem;
+  flex:none;
 }
 .item-qty{
   font-family:var(--font-mono);
@@ -469,6 +572,60 @@ h1{
   min-width:2.4em;
   text-align:center;
 }
+.item-qty-editable{
+  border:1px solid transparent;
+  cursor:pointer;
+  font-size:0.95rem;
+  padding:0.3rem 0.8rem;
+  min-width:3em;
+  transition:border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+}
+.item-qty-editable:hover{
+  border-color:var(--accent);
+  background:color-mix(in srgb, var(--accent) 22%, var(--accent-soft));
+}
+.item-qty-editable:active{transform:scale(0.96);}
+.qty-edit-input{
+  width:4.2em;
+  font-family:var(--font-mono);
+  font-variant-numeric:tabular-nums;
+  text-align:center;
+  padding:0.35rem 0.4rem;
+  font-size:1.15rem;
+  font-weight:600;
+  border:2px solid var(--accent);
+  border-radius:100px;
+  background:var(--panel);
+  color:var(--ink);
+}
+.qty-edit-input:focus{
+  outline:none;
+  box-shadow:0 0 0 4px var(--accent-soft);
+}
+.item-subgroup{
+  border-top:1px solid var(--line);
+}
+.item-subgroup.packed-tone{
+  background:color-mix(in srgb, var(--accent) 6%, transparent);
+  border-top-color:color-mix(in srgb, var(--accent) 30%, var(--line));
+}
+.item-subgroup.excluded-tone{
+  background:color-mix(in srgb, var(--warn) 6%, transparent);
+  border-top-color:color-mix(in srgb, var(--warn) 30%, var(--line));
+}
+.item-subgroup-label{
+  padding:0.55rem 1.1rem 0.35rem;
+  font-family:var(--font-body);
+  font-weight:600;
+  font-size:0.68rem;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  color:var(--ink-dim);
+}
+.item-subgroup.packed-tone .item-subgroup-label{color:var(--accent);}
+.item-subgroup.excluded-tone .item-subgroup-label{color:var(--warn);}
+.item-subgroup .item-row{border-bottom-color:transparent;}
+.item-subgroup .item-row:not(:last-child){border-bottom-color:color-mix(in srgb, var(--ink) 8%, transparent);}
 .tag{
   font-family:var(--font-mono);
   font-size:0.68rem;
@@ -754,12 +911,14 @@ footer{
   h1{font-size:1.6rem;}
   .sub{font-size:0.9rem;}
   .config{padding:1.35rem 1.1rem 1.25rem;}
-  .config-head{flex-direction:column;align-items:flex-start;gap:0.3rem;}
+  .config-head{gap:0.6rem;}
   .field-groups{grid-template-columns:1fr;gap:0.85rem;}
   .field-group{padding:0.9rem 0.9rem 1rem;}
   .field-group .field-grid{grid-template-columns:1fr;}
+  .summary-row{flex-direction:column;align-items:stretch;}
   .summary{gap:0.45rem;}
   .chip{padding:0.42rem 0.7rem;font-size:0.78rem;}
+  .export-btn{justify-content:center;}
   .category summary{padding:0.75rem 0.9rem;font-size:0.95rem;}
   .item-row{
     flex-wrap:wrap;
@@ -767,7 +926,7 @@ footer{
     row-gap:0.4rem;
   }
   .item-main{min-width:100%;order:1;}
-  .item-qty{order:2;}
+  .item-qty-wrap{order:2;}
   .skip-btn{order:3;margin-left:auto;}
   .editor-body{padding:1.1rem 1rem 1.25rem;}
   .editor-toolbar{flex-direction:column;align-items:stretch;}
@@ -785,12 +944,20 @@ footer{
     <p class="sub">Define las condiciones del viaje y la lista se recalcula: qué llevar y cuántas unidades, según destino, duración, temperatura, lluvia, alojamiento y tipo de viaje.</p>
   </header>
 
+  <div class="status-banner" id="status-banner"></div>
+
   <div class="panel config">
     <div class="config-head">
-      <h2>Condiciones del viaje</h2>
-      <p class="config-tagline">Cambia cualquier campo — la maleta se recalcula al instante.</p>
+      <div>
+        <h2>Condiciones del viaje</h2>
+        <p class="config-tagline">Cambia cualquier campo — la maleta se recalcula al instante.</p>
+      </div>
+      <button type="button" class="config-collapse-btn" id="config-collapse-btn" title="Contraer sección" aria-expanded="true">
+        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
     </div>
 
+    <div class="config-body" id="config-body">
     <div class="field-groups">
 
       <div class="field-group">
@@ -897,9 +1064,16 @@ footer{
       </div>
 
     </div>
+    </div>
   </div>
 
-  <div class="summary" id="summary"></div>
+  <div class="summary-row">
+    <div class="summary" id="summary"></div>
+    <button type="button" class="btn primary export-btn" id="export-btn">
+      <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Exportar maleta
+    </button>
+  </div>
 
   <div class="categories" id="categories"></div>
 
@@ -998,6 +1172,7 @@ const els = {
   tmax: document.getElementById('f-tmax'),
   summary: document.getElementById('summary'),
   categories: document.getElementById('categories'),
+  statusBanner: document.getElementById('status-banner'),
   editorRows: document.getElementById('editor-rows'),
   editorFilter: document.getElementById('editor-filter'),
   editorReset: document.getElementById('editor-reset'),
@@ -1035,6 +1210,13 @@ function readTrip(){
 const packedState = {};
 const excludedState = {};
 const showPackedState = {};
+const showExcludedState = {};
+const qtyOverrides = {};
+let editingQtyKey = null;
+
+function effQty(name, computedQty){
+  return qtyOverrides[name] != null ? qtyOverrides[name] : computedQty;
+}
 
 function render(){
   const trip = readTrip();
@@ -1044,7 +1226,29 @@ function render(){
 
   const taking = results.filter(r => !excludedState[r.item.name]);
   const excludedCount = results.length - taking.length;
-  const totalUnits = taking.reduce((s, r) => s + r.qty, 0);
+  const totalUnits = taking.reduce((s, r) => s + effQty(r.item.name, r.qty), 0);
+
+  const resolvedCount = results.filter(r => packedState[r.item.name] || excludedState[r.item.name]).length;
+  const pendingCount = results.length - resolvedCount;
+
+  if (!results.length) {
+    els.statusBanner.innerHTML = '';
+    els.statusBanner.className = 'status-banner';
+  } else if (pendingCount === 0) {
+    els.statusBanner.className = 'status-banner done';
+    els.statusBanner.innerHTML = `
+      <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+      <span>Maleta lista — todo preparado o descartado</span>
+      <span class="status-count">${results.length}/${results.length}</span>
+    `;
+  } else {
+    els.statusBanner.className = 'status-banner pending';
+    els.statusBanner.innerHTML = `
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/></svg>
+      <span>Quedan objetos por preparar</span>
+      <span class="status-count">${resolvedCount}/${results.length}</span>
+    `;
+  }
 
   els.summary.innerHTML = `
     <div class="chip"><span>Destino</span><b>${labelDest(trip.dest)}</b></div>
@@ -1072,53 +1276,76 @@ function render(){
     return;
   }
 
+  function renderRow(r){
+    const key = r.item.name;
+    const packed = !!packedState[key];
+    const excluded = !!excludedState[key];
+    const qty = effQty(key, r.qty);
+    const tags = [];
+    if (r.item.reqRain.length) tags.push('<span class="tag rain">lluvia</span>');
+    if (r.item.maxReq !== null) tags.push('<span class="tag heat">calor</span>');
+
+    const qtyHtml = excluded
+      ? '<span class="item-qty">—</span>'
+      : editingQtyKey === key
+        ? `<input type="number" class="qty-edit-input" min="0" step="1" value="${qty}" data-qtyedit="${escapeAttr(key)}">`
+        : `<button type="button" class="item-qty item-qty-editable" data-editqty="${escapeAttr(key)}" title="Editar cantidad">×${qty}</button>`;
+
+    return `
+      <div class="item-row ${packed ? 'packed' : ''} ${excluded ? 'excluded' : ''}" data-key="${escapeAttr(key)}">
+        <label class="item-main">
+          <input type="checkbox" ${packed ? 'checked' : ''} ${excluded ? 'disabled' : ''} data-toggle="${escapeAttr(key)}">
+          <span class="item-name">${escapeHtml(r.item.name)}</span>
+          ${tags.join('')}
+        </label>
+        <span class="item-qty-wrap">${qtyHtml}</span>
+        <button type="button" class="skip-btn ${excluded ? 'active' : ''}" data-skip="${escapeAttr(key)}" title="${excluded ? 'Volver a incluir en la maleta' : 'No lo llevo en este viaje'}">${excluded ? '↺' : '✕'}</button>
+      </div>
+    `;
+  }
+
   els.categories.innerHTML = cats.map(cat => {
     const rows = byCategory[cat].sort((a,b) => a.item.name.localeCompare(b.item.name, 'es'));
+    const activeRows = rows.filter(r => !excludedState[r.item.name] && !packedState[r.item.name]);
+    const packedRows = rows.filter(r => !excludedState[r.item.name] && packedState[r.item.name]);
+    const excludedRows = rows.filter(r => excludedState[r.item.name]);
     const takingRows = rows.filter(r => !excludedState[r.item.name]);
-    const packedCount = takingRows.filter(r => packedState[r.item.name]).length;
+
     const showPacked = !!showPackedState[cat];
-    const visibleRows = rows.filter(r => showPacked || !packedState[r.item.name]);
+    const showExcluded = !!showExcludedState[cat];
 
-    const rowsHtml = visibleRows.map(r => {
-      const key = r.item.name;
-      const packed = !!packedState[key];
-      const excluded = !!excludedState[key];
-      const tags = [];
-      if (r.item.reqRain.length) tags.push('<span class="tag rain">lluvia</span>');
-      if (r.item.maxReq !== null) tags.push('<span class="tag heat">calor</span>');
-      return `
-        <div class="item-row ${packed ? 'packed' : ''} ${excluded ? 'excluded' : ''}" data-key="${escapeAttr(key)}">
-          <label class="item-main">
-            <input type="checkbox" ${packed ? 'checked' : ''} ${excluded ? 'disabled' : ''} data-toggle="${escapeAttr(key)}">
-            <span class="item-name">${escapeHtml(r.item.name)}</span>
-            ${r.item.parte ? `<span class="item-part">${escapeHtml(r.item.parte)}</span>` : ''}
-            ${tags.join('')}
-          </label>
-          <span class="item-qty">${excluded ? '—' : '×' + r.qty}</span>
-          <button type="button" class="skip-btn ${excluded ? 'active' : ''}" data-skip="${escapeAttr(key)}" title="${excluded ? 'Volver a incluir en la maleta' : 'No lo llevo en este viaje'}">${excluded ? '↺' : '✕'}</button>
-        </div>
-      `;
-    }).join('');
+    const activeHtml = activeRows.map(renderRow).join('');
+    const packedHtml = packedRows.map(renderRow).join('');
+    const excludedHtml = excludedRows.map(renderRow).join('');
 
-    const emptyNote = !visibleRows.length
-      ? `<div class="item-list-empty">${packedCount ? 'Todo empaquetado en esta sección.' : 'Nada por aquí.'}</div>`
+    const emptyNote = !activeRows.length
+      ? `<div class="item-list-empty">${packedRows.length || excludedRows.length ? 'Nada pendiente en esta sección.' : 'Nada por aquí.'}</div>`
       : '';
 
-    const toggleBtn = packedCount
-      ? `<button type="button" class="show-packed-btn" data-showpacked="${escapeAttr(cat)}">${showPacked ? 'Ocultar empaquetados' : `Mostrar empaquetados (${packedCount})`}</button>`
+    const packedGroup = showPacked && packedRows.length
+      ? `<div class="item-subgroup packed-tone"><div class="item-subgroup-label">Empaquetados</div>${packedHtml}</div>`
       : '';
+    const excludedGroup = showExcluded && excludedRows.length
+      ? `<div class="item-subgroup excluded-tone"><div class="item-subgroup-label">No te los llevas</div>${excludedHtml}</div>`
+      : '';
+
+    const footerBtns = [];
+    if (packedRows.length) footerBtns.push(`<button type="button" class="show-packed-btn packed-tone" data-showpacked="${escapeAttr(cat)}">${showPacked ? 'Ocultar empaquetados' : `Mostrar empaquetados (${packedRows.length})`}</button>`);
+    if (excludedRows.length) footerBtns.push(`<button type="button" class="show-packed-btn excluded-tone" data-showexcluded="${escapeAttr(cat)}">${showExcluded ? 'Ocultar descartados' : `Mostrar descartados (${excludedRows.length})`}</button>`);
 
     return `
       <details class="category" open>
         <summary>
           <span>${escapeHtml(cat)}</span>
           <span style="display:flex;align-items:center;">
-            <span class="count">${packedCount}/${takingRows.length}</span>
+            <span class="count">${packedRows.length}/${takingRows.length}</span>
             <span class="arrow">›</span>
           </span>
         </summary>
-        <div class="item-list">${rowsHtml}${emptyNote}</div>
-        ${toggleBtn ? `<div class="category-footer">${toggleBtn}</div>` : ''}
+        <div class="item-list">${activeHtml}${emptyNote}</div>
+        ${packedGroup}
+        ${excludedGroup}
+        ${footerBtns.length ? `<div class="category-footer">${footerBtns.join('')}</div>` : ''}
       </details>
     `;
   }).join('');
@@ -1139,12 +1366,46 @@ function render(){
     });
   });
 
+  els.categories.querySelectorAll('[data-showexcluded]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const cat = e.currentTarget.getAttribute('data-showexcluded');
+      showExcludedState[cat] = !showExcludedState[cat];
+      render();
+    });
+  });
+
   els.categories.querySelectorAll('[data-skip]').forEach(btn => {
     btn.addEventListener('click', e => {
       const key = e.currentTarget.getAttribute('data-skip');
       excludedState[key] = !excludedState[key];
       if (excludedState[key]) packedState[key] = false;
+      if (editingQtyKey === key) editingQtyKey = null;
       render();
+    });
+  });
+
+  els.categories.querySelectorAll('[data-editqty]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      editingQtyKey = e.currentTarget.getAttribute('data-editqty');
+      render();
+      const input = els.categories.querySelector('.qty-edit-input');
+      if (input) { input.focus(); input.select(); }
+    });
+  });
+
+  els.categories.querySelectorAll('[data-qtyedit]').forEach(input => {
+    const commit = () => {
+      const key = input.getAttribute('data-qtyedit');
+      let val = Math.round(parseFloat(input.value));
+      if (!isFinite(val) || val < 0) val = 0;
+      qtyOverrides[key] = val;
+      editingQtyKey = null;
+      render();
+    };
+    input.addEventListener('blur', commit);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') input.blur();
+      if (e.key === 'Escape') { editingQtyKey = null; render(); }
     });
   });
 }
@@ -1414,6 +1675,100 @@ document.getElementById('add-item-btn').addEventListener('click', () => {
 
 render();
 renderEditor();
+
+/* ---- Exportar maleta ---- */
+function buildExportText(){
+  const trip = readTrip();
+  const place = document.getElementById('f-place').value.trim() || labelDest(trip.dest);
+  const results = itemsState
+    .map(item => ({ item, qty: computeQty(item, trip.days) }))
+    .filter(r => included(r.item, trip))
+    .filter(r => !excludedState[r.item.name]);
+
+  const byCategory = {};
+  results.forEach(r => {
+    const c = r.item.category || 'Varios';
+    (byCategory[c] = byCategory[c] || []).push(r);
+  });
+  const cats = Object.keys(byCategory).sort((a,b) => {
+    const ia = CATEGORY_ORDER.indexOf(a), ib = CATEGORY_ORDER.indexOf(b);
+    return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+  });
+
+  const totalUnits = results.reduce((s, r) => s + effQty(r.item.name, r.qty), 0);
+  const lines = [];
+  lines.push(`LA MALETA — ${place}`);
+  lines.push(`${labelDest(trip.dest)} · ${trip.days} días · ${trip.tmin}–${trip.tmax}°C · lluvia ${labelRain(trip.rain)}`);
+  lines.push(`${results.length} objetos · ${totalUnits} unidades`);
+  lines.push('');
+
+  cats.forEach(cat => {
+    const rows = byCategory[cat].sort((a,b) => a.item.name.localeCompare(b.item.name, 'es'));
+    lines.push(cat.toUpperCase());
+    rows.forEach(r => {
+      const mark = packedState[r.item.name] ? '[x]' : '[ ]';
+      lines.push(`${mark} ${r.item.name} ×${effQty(r.item.name, r.qty)}`);
+    });
+    lines.push('');
+  });
+
+  lines.push(`Generado con La Maleta — ${new Date().toLocaleDateString('es-ES')}`);
+  return lines.join('\n');
+}
+
+const ACCENT_MAP = { 'á':'a','é':'e','í':'i','ó':'o','ú':'u','ñ':'n','ü':'u' };
+
+function slugify(s){
+  const stripped = s.toLowerCase().replace(/[áéíóúñü]/g, c => ACCENT_MAP[c] || c);
+  return stripped
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '') || 'viaje';
+}
+
+const configPanelEl = document.querySelector('.panel.config');
+const configCollapseBtn = document.getElementById('config-collapse-btn');
+configCollapseBtn.addEventListener('click', () => {
+  const collapsed = configPanelEl.classList.toggle('collapsed');
+  configCollapseBtn.setAttribute('aria-expanded', String(!collapsed));
+  configCollapseBtn.title = collapsed ? 'Expandir sección' : 'Contraer sección';
+});
+
+document.getElementById('export-btn').addEventListener('click', async () => {
+  const btn = document.getElementById('export-btn');
+  const text = buildExportText();
+  const place = document.getElementById('f-place').value.trim() || 'viaje';
+  const filename = `maleta-${slugify(place)}.txt`;
+
+  const originalLabel = btn.innerHTML;
+  const setLabel = (html) => { btn.innerHTML = html; };
+
+  try {
+    if (window.claude && window.claude.downloads) {
+      await window.claude.downloads.save({ filename, data: text });
+      setLabel('✓ Exportada');
+      setTimeout(() => setLabel(originalLabel), 1800);
+      return;
+    }
+    throw new Error('no-claude-downloads');
+  } catch (e) {
+    try {
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      setLabel('✓ Exportada');
+      setTimeout(() => setLabel(originalLabel), 1800);
+    } catch (e2) {
+      setLabel('Error al exportar');
+      setTimeout(() => setLabel(originalLabel), 1800);
+    }
+  }
+});
 
 /* ---- Fondo: hojas a la brisa ---- */
 (function(){
