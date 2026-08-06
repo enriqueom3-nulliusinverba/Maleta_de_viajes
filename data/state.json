@@ -1647,7 +1647,8 @@
       "Chubasquero do pito": true,
       "Colonia": true,
       "Compeed ampollas": true,
-      "Crema sol": false
+      "Crema sol": false,
+      "Desodorante": true
     },
     "excluded": {
       "Cinturon": true,
