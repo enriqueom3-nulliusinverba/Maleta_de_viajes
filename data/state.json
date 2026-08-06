@@ -1630,9 +1630,14 @@
       "Calcetines": true,
       "Calzoncillos": true,
       "Camiseta": true,
-      "Camiseta deporte": true
+      "Camiseta deporte": true,
+      "Chinos cortos": true,
+      "Chubasquero": true,
+      "Cinturon": false
     },
-    "excluded": {},
+    "excluded": {
+      "Cinturon": true
+    },
     "qty": {
       "Camiseta deporte": 2,
       "Chinos cortos": 2
