@@ -1639,7 +1639,8 @@
       "Pantalones vaqueros": false,
       "Pijama": true,
       "Sudadera & Polar": true,
-      "Acondicionador": false
+      "Acondicionador": false,
+      "Antifaz": true
     },
     "excluded": {
       "Cinturon": true,
