@@ -1629,11 +1629,12 @@
       "Chromecast": true,
       "Calcetines": true,
       "Calzoncillos": true,
-      "Camiseta": true
+      "Camiseta": true,
+      "Camiseta deporte": true
     },
     "excluded": {},
     "qty": {
-      "Camiseta deporte": 5
+      "Camiseta deporte": 2
     },
     "showPacked": {},
     "showExcluded": {}
