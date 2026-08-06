@@ -1718,7 +1718,8 @@
       "Aseo": false
     },
     "showExcluded": {
-      "Aseo": false
+      "Aseo": false,
+      "Aventura": true
     }
   },
   "trip": {
