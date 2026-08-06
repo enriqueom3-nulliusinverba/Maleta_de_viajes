@@ -168,6 +168,7 @@ h1{
   display:flex;
   flex-direction:column;
   gap:0.9rem;
+  min-width:0;
 }
 .group-label{
   display:flex;
@@ -203,6 +204,7 @@ h1{
   display:flex;
   flex-direction:column;
   gap:0.4rem;
+  min-width:0;
 }
 .field label{
   font-size:0.68rem;
@@ -222,6 +224,13 @@ h1{
   color:var(--ink);
   transition:border-color 0.15s ease, box-shadow 0.15s ease;
   width:100%;
+  min-width:0;
+  max-width:100%;
+  box-sizing:border-box;
+}
+.field input[type="date"]{
+  -webkit-appearance:none;
+  appearance:none;
 }
 .field select:focus,.field input:focus{
   outline:none;
@@ -382,6 +391,30 @@ h1{
 .item-list{
   border-top:1px solid var(--line);
 }
+.item-list-empty{
+  padding:1rem 1.1rem;
+  color:var(--ink-dim);
+  font-size:0.85rem;
+  font-style:italic;
+}
+.category-footer{
+  border-top:1px solid var(--line);
+  padding:0.6rem 1.1rem;
+  display:flex;
+  justify-content:center;
+}
+.show-packed-btn{
+  background:transparent;
+  border:none;
+  color:var(--accent);
+  font-family:var(--font-body);
+  font-size:0.78rem;
+  font-weight:600;
+  letter-spacing:0.01em;
+  cursor:pointer;
+  padding:0.3rem 0.6rem;
+}
+.show-packed-btn:hover{text-decoration:underline;}
 .item-row{
   display:flex;
   align-items:center;
@@ -1001,6 +1034,7 @@ function readTrip(){
 
 const packedState = {};
 const excludedState = {};
+const showPackedState = {};
 
 function render(){
   const trip = readTrip();
@@ -1040,7 +1074,12 @@ function render(){
 
   els.categories.innerHTML = cats.map(cat => {
     const rows = byCategory[cat].sort((a,b) => a.item.name.localeCompare(b.item.name, 'es'));
-    const rowsHtml = rows.map(r => {
+    const takingRows = rows.filter(r => !excludedState[r.item.name]);
+    const packedCount = takingRows.filter(r => packedState[r.item.name]).length;
+    const showPacked = !!showPackedState[cat];
+    const visibleRows = rows.filter(r => showPacked || !packedState[r.item.name]);
+
+    const rowsHtml = visibleRows.map(r => {
       const key = r.item.name;
       const packed = !!packedState[key];
       const excluded = !!excludedState[key];
@@ -1060,8 +1099,15 @@ function render(){
         </div>
       `;
     }).join('');
-    const takingRows = rows.filter(r => !excludedState[r.item.name]);
-    const packedCount = takingRows.filter(r => packedState[r.item.name]).length;
+
+    const emptyNote = !visibleRows.length
+      ? `<div class="item-list-empty">${packedCount ? 'Todo empaquetado en esta sección.' : 'Nada por aquí.'}</div>`
+      : '';
+
+    const toggleBtn = packedCount
+      ? `<button type="button" class="show-packed-btn" data-showpacked="${escapeAttr(cat)}">${showPacked ? 'Ocultar empaquetados' : `Mostrar empaquetados (${packedCount})`}</button>`
+      : '';
+
     return `
       <details class="category" open>
         <summary>
@@ -1071,7 +1117,8 @@ function render(){
             <span class="arrow">›</span>
           </span>
         </summary>
-        <div class="item-list">${rowsHtml}</div>
+        <div class="item-list">${rowsHtml}${emptyNote}</div>
+        ${toggleBtn ? `<div class="category-footer">${toggleBtn}</div>` : ''}
       </details>
     `;
   }).join('');
@@ -1080,6 +1127,14 @@ function render(){
     cb.addEventListener('change', e => {
       const key = e.target.getAttribute('data-toggle');
       packedState[key] = e.target.checked;
+      render();
+    });
+  });
+
+  els.categories.querySelectorAll('[data-showpacked]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const cat = e.currentTarget.getAttribute('data-showpacked');
+      showPackedState[cat] = !showPackedState[cat];
       render();
     });
   });
@@ -1385,6 +1440,8 @@ renderEditor();
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   }
 
+  const speedFactor = reduceMotion ? 0.2 : 1;
+
   function makeLeaf(spawnAtTop){
     const size = 7 + Math.random() * 8;
     return {
@@ -1392,8 +1449,8 @@ renderEditor();
       y: spawnAtTop ? -20 - Math.random() * 100 : Math.random() * H,
       size,
       rot: Math.random() * Math.PI * 2,
-      rotSpeed: (Math.random() - 0.5) * 0.02,
-      fallSpeed: 0.35 + Math.random() * 0.5,
+      rotSpeed: (Math.random() - 0.5) * 0.02 * speedFactor,
+      fallSpeed: (0.35 + Math.random() * 0.5) * speedFactor,
       swayAmp: 18 + Math.random() * 26,
       swaySpeed: 0.006 + Math.random() * 0.01,
       swayPhase: Math.random() * Math.PI * 2,
@@ -1431,46 +1488,36 @@ renderEditor();
   }
 
   function step(){
-    ctx.clearRect(0, 0, W, H);
-    windPhase += 0.004;
-    const windDrift = Math.sin(windPhase) * 0.4;
+    if (W > 0 && H > 0) {
+      ctx.clearRect(0, 0, W, H);
+      windPhase += 0.004 * speedFactor;
+      const windDrift = Math.sin(windPhase) * 0.4;
 
-    leaves.forEach(l => {
-      l.y += l.fallSpeed;
-      l.x += Math.sin(l.y * l.swaySpeed + l.swayPhase) * (l.swayAmp * 0.02) + windDrift;
-      l.rot += l.rotSpeed;
-      drawLeaf(l);
-      if (l.y > H + 30) Object.assign(l, makeLeaf(true));
-      if (l.x < -40) l.x = W + 30;
-      if (l.x > W + 40) l.x = -30;
-    });
+      leaves.forEach(l => {
+        l.y += l.fallSpeed;
+        l.x += Math.sin(l.y * l.swaySpeed + l.swayPhase) * (l.swayAmp * 0.02) + windDrift;
+        l.rot += l.rotSpeed;
+        drawLeaf(l);
+        if (l.y > H + 30) Object.assign(l, makeLeaf(true));
+        if (l.x < -40) l.x = W + 30;
+        if (l.x > W + 40) l.x = -30;
+      });
+    }
 
     requestAnimationFrame(step);
-  }
-
-  function drawStatic(){
-    ctx.clearRect(0, 0, W, H);
-    leaves.forEach(drawLeaf);
   }
 
   resize();
   initLeaves();
-  if (reduceMotion) {
-    drawStatic();
-  } else {
-    requestAnimationFrame(step);
-  }
+  requestAnimationFrame(step);
 
-  window.addEventListener('resize', () => {
-    resize();
-    initLeaves();
-    if (reduceMotion) drawStatic();
-  });
+  const onResize = () => { resize(); initLeaves(); };
+  window.addEventListener('resize', onResize);
+  window.addEventListener('orientationchange', onResize);
 
   new MutationObserver(() => {
     colors = readColors();
     leaves.forEach(l => { l.color = colors[Math.floor(Math.random() * colors.length)] || l.color; });
-    if (reduceMotion) drawStatic();
   }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 })();
 </script>
