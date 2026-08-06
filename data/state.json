@@ -1681,7 +1681,12 @@
       "Betadine": false,
       "Gel hidroalcohólico": true,
       "Inhalador": true,
-      "Mascarillas": true
+      "Mascarillas": true,
+      "Med | Alergia": true,
+      "Med | Dormir": true,
+      "Med | Ibuprofeno": true,
+      "Med | Lactosa": true,
+      "Med | Omeprazol": true
     },
     "excluded": {
       "Cinturon": true,
