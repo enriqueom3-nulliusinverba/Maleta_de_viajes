@@ -1663,7 +1663,8 @@
       "Carnet conducir": true,
       "Credit card": true,
       "DNI": true,
-      "Bolsa móvil": false
+      "Bolsa móvil": false,
+      "Escarpines": true
     },
     "excluded": {
       "Cinturon": true,
