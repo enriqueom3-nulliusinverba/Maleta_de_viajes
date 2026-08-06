@@ -1627,7 +1627,9 @@
   "progress": {
     "packed": {
       "Chromecast": true,
-      "Calcetines": true
+      "Calcetines": true,
+      "Calzoncillos": true,
+      "Camiseta": true
     },
     "excluded": {},
     "qty": {},
