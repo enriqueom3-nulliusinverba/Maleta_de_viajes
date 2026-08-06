@@ -1672,7 +1672,9 @@
       "Candado": false,
       "Cartera": true,
       "Gafas de sol": true,
-      "Paraguas": true
+      "Paraguas": true,
+      "Cafe": false,
+      "Especiero": false
     },
     "excluded": {
       "Cinturon": true,
@@ -1684,7 +1686,9 @@
       "Toalla extra": true,
       "Bolsa móvil": true,
       "Almohada viaje (funda)": true,
-      "Candado": true
+      "Candado": true,
+      "Cafe": true,
+      "Especiero": true
     },
     "qty": {
       "Camiseta deporte": 2,
