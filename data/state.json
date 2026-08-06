@@ -1657,8 +1657,12 @@
       "Pantalones chandal": 2,
       "Sudadera & Polar": 2
     },
-    "showPacked": {},
-    "showExcluded": {}
+    "showPacked": {
+      "Aseo": true
+    },
+    "showExcluded": {
+      "Aseo": false
+    }
   },
   "trip": {
     "f-place": "Cantabria ",
