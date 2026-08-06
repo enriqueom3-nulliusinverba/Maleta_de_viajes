@@ -1,0 +1,13 @@
+{
+  "items": [],
+  "progress": {
+    "packed": {},
+    "excluded": {},
+    "qty": {},
+    "showPacked": {},
+    "showExcluded": {}
+  },
+  "trip": {
+    "test": "conexion-ok"
+  }
+}
