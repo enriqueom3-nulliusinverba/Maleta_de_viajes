@@ -1633,7 +1633,9 @@
       "Camiseta deporte": true,
       "Chinos cortos": true,
       "Chubasquero": true,
-      "Cinturon": false
+      "Cinturon": false,
+      "Deportivas": true,
+      "Gorra": true
     },
     "excluded": {
       "Cinturon": true
