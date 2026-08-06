@@ -1638,11 +1638,13 @@
       "Gorra": true,
       "Pantalones vaqueros": false,
       "Pijama": true,
-      "Sudadera & Polar": true
+      "Sudadera & Polar": true,
+      "Acondicionador": false
     },
     "excluded": {
       "Cinturon": true,
-      "Pantalones vaqueros": true
+      "Pantalones vaqueros": true,
+      "Acondicionador": true
     },
     "qty": {
       "Camiseta deporte": 2,
