@@ -1641,7 +1641,9 @@
       "Sudadera & Polar": true,
       "Acondicionador": false,
       "Antifaz": true,
-      "Cacao labios": true
+      "Cacao labios": true,
+      "Cepillo dientes": true,
+      "Champu": true
     },
     "excluded": {
       "Cinturon": true,
