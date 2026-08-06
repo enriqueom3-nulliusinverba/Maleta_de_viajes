@@ -1207,11 +1207,34 @@ function readTrip(){
   };
 }
 
-const packedState = {};
-const excludedState = {};
-const showPackedState = {};
-const showExcludedState = {};
-const qtyOverrides = {};
+const PROGRESS_KEY = 'maleta-progress-v1';
+
+function loadProgress(){
+  try {
+    const raw = localStorage.getItem(PROGRESS_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  return {};
+}
+
+function saveProgress(){
+  try {
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify({
+      packed: packedState,
+      excluded: excludedState,
+      qty: qtyOverrides,
+      showPacked: showPackedState,
+      showExcluded: showExcludedState,
+    }));
+  } catch (e) {}
+}
+
+const savedProgress = loadProgress();
+const packedState = savedProgress.packed || {};
+const excludedState = savedProgress.excluded || {};
+const showPackedState = savedProgress.showPacked || {};
+const showExcludedState = savedProgress.showExcluded || {};
+const qtyOverrides = savedProgress.qty || {};
 let editingQtyKey = null;
 
 function effQty(name, computedQty){
@@ -1354,6 +1377,7 @@ function render(){
     cb.addEventListener('change', e => {
       const key = e.target.getAttribute('data-toggle');
       packedState[key] = e.target.checked;
+      saveProgress();
       render();
     });
   });
@@ -1362,6 +1386,7 @@ function render(){
     btn.addEventListener('click', e => {
       const cat = e.currentTarget.getAttribute('data-showpacked');
       showPackedState[cat] = !showPackedState[cat];
+      saveProgress();
       render();
     });
   });
@@ -1370,6 +1395,7 @@ function render(){
     btn.addEventListener('click', e => {
       const cat = e.currentTarget.getAttribute('data-showexcluded');
       showExcludedState[cat] = !showExcludedState[cat];
+      saveProgress();
       render();
     });
   });
@@ -1380,6 +1406,7 @@ function render(){
       excludedState[key] = !excludedState[key];
       if (excludedState[key]) packedState[key] = false;
       if (editingQtyKey === key) editingQtyKey = null;
+      saveProgress();
       render();
     });
   });
@@ -1400,6 +1427,7 @@ function render(){
       if (!isFinite(val) || val < 0) val = 0;
       qtyOverrides[key] = val;
       editingQtyKey = null;
+      saveProgress();
       render();
     };
     input.addEventListener('blur', commit);
@@ -1421,9 +1449,38 @@ function escapeHtml(s){
 }
 function escapeAttr(s){ return escapeHtml(s); }
 
+/* ---- Persistencia de las condiciones del viaje ---- */
+const TRIP_KEY = 'maleta-trip-v1';
+const tripFieldIds = ['f-place', 'f-dest', 'f-days', 'f-startdate', 'f-accom', 'f-type', 'f-rain', 'f-tmin', 'f-tmax'];
+
+function saveTripFields(){
+  try {
+    const data = {};
+    tripFieldIds.forEach(id => { data[id] = document.getElementById(id).value; });
+    localStorage.setItem(TRIP_KEY, JSON.stringify(data));
+  } catch (e) {}
+}
+
+function loadTripFields(){
+  try {
+    const raw = localStorage.getItem(TRIP_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    tripFieldIds.forEach(id => {
+      if (data[id] !== undefined && data[id] !== '') document.getElementById(id).value = data[id];
+    });
+  } catch (e) {}
+}
+
+loadTripFields();
+
 [els.dest, els.days, els.accom, els.type, els.rain, els.tmin, els.tmax].forEach(el => {
-  el.addEventListener('input', render);
-  el.addEventListener('change', render);
+  el.addEventListener('input', () => { saveTripFields(); render(); });
+  el.addEventListener('change', () => { saveTripFields(); render(); });
+});
+[document.getElementById('f-place'), document.getElementById('f-startdate')].forEach(el => {
+  el.addEventListener('input', saveTripFields);
+  el.addEventListener('change', saveTripFields);
 });
 
 /* ---- Búsqueda de previsión (ventana emergente pequeña) ---- */
