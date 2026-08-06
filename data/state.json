@@ -1656,7 +1656,9 @@
       "Tapones loop": true,
       "Toalla baño": true,
       "Toalla extra": false,
-      "toallitas humedas": true
+      "toallitas humedas": true,
+      "Auriculares": true,
+      "Cargador USB C": true
     },
     "excluded": {
       "Cinturon": true,
