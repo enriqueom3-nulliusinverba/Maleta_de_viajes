@@ -407,16 +407,10 @@ h1{
 .summary-row{
   display:flex;
   align-items:flex-start;
-  justify-content:space-between;
+  justify-content:flex-end;
   gap:1rem;
   flex-wrap:wrap;
   margin-bottom:1.75rem;
-}
-.summary{
-  display:flex;
-  flex-wrap:wrap;
-  gap:0.6rem;
-  flex:1;
 }
 .summary-actions{
   display:flex;
@@ -441,28 +435,6 @@ h1{
   stroke-linejoin:round;
   flex:none;
 }
-.chip{
-  display:flex;
-  align-items:baseline;
-  gap:0.4rem;
-  padding:0.5rem 0.85rem;
-  border:1px solid var(--line);
-  border-radius:100px;
-  background:var(--panel);
-  font-size:0.85rem;
-}
-.chip b{
-  font-family:var(--font-mono);
-  font-variant-numeric:tabular-nums;
-  color:var(--accent);
-  font-size:0.95rem;
-}
-.chip.total{
-  background:var(--accent-soft);
-  border-color:var(--accent);
-}
-.chip.total b{color:var(--ink);}
-
 /* ---- Categories ---- */
 .categories{
   display:flex;
@@ -477,11 +449,21 @@ h1{
   transition:border-color 0.2s ease;
 }
 .category.cat-pending{
-  border-color:color-mix(in srgb, var(--warn) 40%, var(--line));
+  border-color:color-mix(in srgb, var(--warn) 55%, var(--line));
 }
 .category.cat-done{
-  border-color:color-mix(in srgb, var(--accent) 45%, var(--line));
+  border-color:color-mix(in srgb, var(--accent) 60%, var(--line));
 }
+.cat-status-icon{
+  width:16px;height:16px;
+  flex:none;
+  fill:none;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.cat-done .cat-status-icon{stroke:var(--accent);}
+.cat-pending .cat-status-icon{stroke:var(--warn);}
 .category summary{
   list-style:none;
   cursor:pointer;
@@ -494,10 +476,10 @@ h1{
   transition:background 0.2s ease;
 }
 .category.cat-pending summary{
-  background:color-mix(in srgb, var(--warn) 7%, transparent);
+  background:color-mix(in srgb, var(--warn) 12%, transparent);
 }
 .category.cat-done summary{
-  background:color-mix(in srgb, var(--accent) 9%, transparent);
+  background:color-mix(in srgb, var(--accent) 14%, transparent);
 }
 .category summary::-webkit-details-marker{display:none;}
 .category.cat-pending summary .count{color:var(--warn);}
@@ -962,8 +944,6 @@ footer p:last-child{margin-bottom:0;}
   .field-group{padding:0.9rem 0.9rem 1rem;}
   .field-group .field-grid{grid-template-columns:1fr;}
   .summary-row{flex-direction:column;align-items:stretch;}
-  .summary{gap:0.45rem;}
-  .chip{padding:0.42rem 0.7rem;font-size:0.78rem;}
   .summary-actions{flex-direction:column;}
   .export-btn,.reset-btn{justify-content:center;}
   .category summary{padding:0.75rem 0.9rem;font-size:0.95rem;}
@@ -1063,18 +1043,17 @@ footer p:last-child{margin-bottom:0;}
   <header class="page-head">
     <p class="eyebrow">Maleta de viaje</p>
     <h1>Qué meter en la maleta</h1>
-    <p class="sub">Define las condiciones del viaje y la lista se recalcula: qué llevar y cuántas unidades, según destino, duración, temperatura, lluvia, alojamiento y tipo de viaje.</p>
   </header>
 
   <div class="status-banner" id="status-banner"></div>
 
-  <div class="panel config">
+  <div class="panel config collapsed">
     <div class="config-head">
       <div>
         <h2>Condiciones del viaje</h2>
         <p class="config-tagline">Cambia cualquier campo — la maleta se recalcula al instante.</p>
       </div>
-      <button type="button" class="config-collapse-btn" id="config-collapse-btn" title="Contraer sección" aria-expanded="true">
+      <button type="button" class="config-collapse-btn" id="config-collapse-btn" title="Expandir sección" aria-expanded="false">
         <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
       </button>
     </div>
@@ -1190,7 +1169,6 @@ footer p:last-child{margin-bottom:0;}
   </div>
 
   <div class="summary-row">
-    <div class="summary" id="summary"></div>
     <div class="summary-actions">
       <button type="button" class="btn ghost reset-btn" id="reset-trip-btn" title="Borra lo empaquetado/descartado y las cantidades editadas para empezar de cero">
         <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
@@ -1326,7 +1304,6 @@ const els = {
   rain: document.getElementById('f-rain'),
   tmin: document.getElementById('f-tmin'),
   tmax: document.getElementById('f-tmax'),
-  summary: document.getElementById('summary'),
   categories: document.getElementById('categories'),
   statusBanner: document.getElementById('status-banner'),
   editorRows: document.getElementById('editor-rows'),
@@ -1406,10 +1383,6 @@ function render(){
     .map(item => ({ item, qty: computeQty(item, trip.days) }))
     .filter(r => included(r.item, trip));
 
-  const taking = results.filter(r => !excludedState[r.item.name]);
-  const excludedCount = results.length - taking.length;
-  const totalUnits = taking.reduce((s, r) => s + effQty(r.item.name, r.qty), 0);
-
   const resolvedCount = results.filter(r => packedState[r.item.name] || excludedState[r.item.name]).length;
   const pendingCount = results.length - resolvedCount;
 
@@ -1427,20 +1400,9 @@ function render(){
     els.statusBanner.className = 'status-banner pending';
     els.statusBanner.innerHTML = `
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/></svg>
-      <span>Quedan objetos por preparar</span>
-      <span class="status-count">${resolvedCount}/${results.length}</span>
+      <span>Quedan ${pendingCount} objeto${pendingCount === 1 ? '' : 's'} por preparar</span>
     `;
   }
-
-  els.summary.innerHTML = `
-    <div class="chip"><span>Destino</span><b>${labelDest(trip.dest)}</b></div>
-    <div class="chip"><span>Días</span><b>${trip.days}</b></div>
-    <div class="chip"><span>Temp.</span><b>${trip.tmin}–${trip.tmax}°C</b></div>
-    <div class="chip"><span>Lluvia</span><b>${labelRain(trip.rain)}</b></div>
-    <div class="chip total"><span>Objetos a llevar</span><b>${taking.length}</b></div>
-    <div class="chip total"><span>Unidades totales</span><b>${totalUnits}</b></div>
-    ${excludedCount ? `<div class="chip"><span>Descartados</span><b>${excludedCount}</b></div>` : ''}
-  `;
 
   const byCategory = {};
   results.forEach(r => {
@@ -1522,10 +1484,17 @@ function render(){
     const isOpen = categoryOpenState[cat] !== undefined ? categoryOpenState[cat] : true;
     const stateClass = catDone ? 'cat-done' : 'cat-pending';
 
+    const stateIcon = catDone
+      ? '<svg class="cat-status-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>'
+      : '<svg class="cat-status-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v5"/><path d="M12 16.5v.01"/></svg>';
+
     return `
       <details class="category ${stateClass}" ${isOpen ? 'open' : ''} data-cat="${escapeAttr(cat)}">
         <summary>
-          <span>${escapeHtml(cat)}</span>
+          <span style="display:flex;align-items:center;gap:0.5rem;">
+            ${stateIcon}
+            <span>${escapeHtml(cat)}</span>
+          </span>
           <span style="display:flex;align-items:center;">
             <span class="count">${packedRows.length}/${takingRows.length}</span>
             <span class="arrow">›</span>
