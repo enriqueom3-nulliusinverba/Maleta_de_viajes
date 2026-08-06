@@ -1664,7 +1664,8 @@
       "Credit card": true,
       "DNI": true,
       "Bolsa móvil": false,
-      "Escarpines": true
+      "Escarpines": true,
+      "Prismáticos": true
     },
     "excluded": {
       "Cinturon": true,
