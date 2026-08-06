@@ -1662,7 +1662,8 @@
       "Power hub": true,
       "Carnet conducir": true,
       "Credit card": true,
-      "DNI": true
+      "DNI": true,
+      "Bolsa móvil": false
     },
     "excluded": {
       "Cinturon": true,
@@ -1671,7 +1672,8 @@
       "Champu": true,
       "Crema sol": true,
       "Gel": true,
-      "Toalla extra": true
+      "Toalla extra": true,
+      "Bolsa móvil": true
     },
     "qty": {
       "Camiseta deporte": 2,
