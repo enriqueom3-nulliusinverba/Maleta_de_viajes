@@ -1658,7 +1658,8 @@
       "Toalla extra": false,
       "toallitas humedas": true,
       "Auriculares": true,
-      "Cargador USB C": true
+      "Cargador USB C": true,
+      "Power hub": true
     },
     "excluded": {
       "Cinturon": true,
