@@ -1715,7 +1715,8 @@
       "Sudadera & Polar": 2
     },
     "showPacked": {
-      "Aseo": false
+      "Aseo": false,
+      "Aventura": true
     },
     "showExcluded": {
       "Aseo": false,
