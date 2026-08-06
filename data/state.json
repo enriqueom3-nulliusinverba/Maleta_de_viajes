@@ -1646,13 +1646,15 @@
       "Champu": false,
       "Chubasquero do pito": true,
       "Colonia": true,
-      "Compeed ampollas": true
+      "Compeed ampollas": true,
+      "Crema sol": false
     },
     "excluded": {
       "Cinturon": true,
       "Pantalones vaqueros": true,
       "Acondicionador": true,
-      "Champu": true
+      "Champu": true,
+      "Crema sol": true
     },
     "qty": {
       "Camiseta deporte": 2,
