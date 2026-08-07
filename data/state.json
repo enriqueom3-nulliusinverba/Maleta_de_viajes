@@ -1694,7 +1694,8 @@
       "Ebook": true,
       "Bañador": true,
       "Pantalones chandal": true,
-      "Abrigo (Ligero)": false
+      "Abrigo (Ligero)": false,
+      "Reloj": true
     },
     "excluded": {
       "Cinturon": true,
