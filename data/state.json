@@ -1696,7 +1696,8 @@
       "Pantalones chandal": true,
       "Abrigo (Ligero)": false,
       "Reloj": true,
-      "Almohada viaje": true
+      "Almohada viaje": true,
+      "Dron": true
     },
     "excluded": {
       "Cinturon": true,
