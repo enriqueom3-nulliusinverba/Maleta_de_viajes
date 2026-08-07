@@ -1693,7 +1693,8 @@
       "Maquinilla afeitar": true,
       "Ebook": true,
       "Bañador": true,
-      "Pantalones chandal": true
+      "Pantalones chandal": true,
+      "Abrigo (Ligero)": false
     },
     "excluded": {
       "Cinturon": true,
@@ -1710,7 +1711,8 @@
       "Especiero": true,
       "Aftersun": true,
       "Betadine": true,
-      "Termómetro": true
+      "Termómetro": true,
+      "Abrigo (Ligero)": true
     },
     "qty": {
       "Camiseta deporte": 2,
