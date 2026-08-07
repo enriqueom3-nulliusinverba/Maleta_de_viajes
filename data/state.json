@@ -1721,7 +1721,7 @@
       "Aseo": false,
       "Aventura": true,
       "Digital": false,
-      "Ropa": true
+      "Ropa": false
     },
     "showExcluded": {
       "Aseo": false,
