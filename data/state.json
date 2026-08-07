@@ -1691,7 +1691,9 @@
       "Termómetro": false,
       "Botas montaña": true,
       "Maquinilla afeitar": true,
-      "Ebook": true
+      "Ebook": true,
+      "Bañador": true,
+      "Pantalones chandal": true
     },
     "excluded": {
       "Cinturon": true,
