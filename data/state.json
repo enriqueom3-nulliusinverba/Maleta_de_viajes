@@ -1697,7 +1697,8 @@
       "Abrigo (Ligero)": false,
       "Reloj": true,
       "Almohada viaje": true,
-      "Dron": true
+      "Dron": true,
+      "Gafas ver": true
     },
     "excluded": {
       "Cinturon": true,
