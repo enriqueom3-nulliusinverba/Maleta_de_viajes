@@ -1698,7 +1698,8 @@
       "Reloj": true,
       "Almohada viaje": true,
       "Dron": true,
-      "Gafas ver": true
+      "Gafas ver": true,
+      "Movil": true
     },
     "excluded": {
       "Cinturon": true,
