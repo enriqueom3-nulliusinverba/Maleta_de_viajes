@@ -1627,7 +1627,19 @@
   ],
   "progress": {
     "packed": {
-      "Abrigo (Ligero)": true
+      "Abrigo (Ligero)": true,
+      "Bañador": true,
+      "Calcetines": true,
+      "Calzoncillos": true,
+      "Camiseta": true,
+      "Camiseta deporte": true,
+      "Chanclas": true,
+      "Chinos cortos": true,
+      "Chubasquero": true,
+      "Cinturon": true,
+      "Deportivas": true,
+      "Gorra": true,
+      "Pantalones chandal": true
     },
     "excluded": {},
     "qty": {
