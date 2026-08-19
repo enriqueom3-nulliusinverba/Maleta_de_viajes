@@ -1639,9 +1639,12 @@
       "Cinturon": true,
       "Deportivas": true,
       "Gorra": true,
-      "Pantalones chandal": true
+      "Pantalones chandal": true,
+      "Pantalones vaqueros": false
     },
-    "excluded": {},
+    "excluded": {
+      "Pantalones vaqueros": true
+    },
     "qty": {
       "Calcetines": 8
     },
