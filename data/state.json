@@ -1626,7 +1626,9 @@
     }
   ],
   "progress": {
-    "packed": {},
+    "packed": {
+      "Abrigo (Ligero)": true
+    },
     "excluded": {},
     "qty": {
       "Calcetines": 8
