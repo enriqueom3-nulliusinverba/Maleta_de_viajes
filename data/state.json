@@ -1645,7 +1645,9 @@
     "qty": {
       "Calcetines": 8
     },
-    "showPacked": {},
+    "showPacked": {
+      "Ropa": true
+    },
     "showExcluded": {}
   },
   "trip": {
