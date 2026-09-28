@@ -1667,7 +1667,8 @@
       "Termómetro": true,
       "Cargador USB C": true,
       "Ebook": true,
-      "Portatil": true
+      "Portatil": true,
+      "Power hub": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
