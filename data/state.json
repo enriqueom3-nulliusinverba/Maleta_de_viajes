@@ -1626,31 +1626,10 @@
     }
   ],
   "progress": {
-    "packed": {
-      "Abrigo (Ligero)": true,
-      "Bañador": true,
-      "Calcetines": true,
-      "Calzoncillos": true,
-      "Camiseta": true,
-      "Camiseta deporte": true,
-      "Chanclas": true,
-      "Chinos cortos": true,
-      "Chubasquero": true,
-      "Cinturon": true,
-      "Deportivas": true,
-      "Gorra": true,
-      "Pantalones chandal": true,
-      "Pantalones vaqueros": false
-    },
-    "excluded": {
-      "Pantalones vaqueros": true
-    },
-    "qty": {
-      "Calcetines": 8
-    },
-    "showPacked": {
-      "Ropa": false
-    },
+    "packed": {},
+    "excluded": {},
+    "qty": {},
+    "showPacked": {},
     "showExcluded": {}
   },
   "trip": {
