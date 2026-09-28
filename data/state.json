@@ -1668,7 +1668,9 @@
       "Cargador USB C": true,
       "Ebook": true,
       "Portatil": true,
-      "Power hub": true
+      "Power hub": true,
+      "Carnet conducir": true,
+      "Credit card": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
