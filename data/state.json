@@ -1632,7 +1632,9 @@
       "Camisa de trabajo": true,
       "Abrigo (Ligero)": false,
       "Sudadera & Polar": true,
-      "Zapatos": true
+      "Zapatos": true,
+      "Pantalones vaqueros": true,
+      "Pantalones chinos": true
     },
     "excluded": {
       "Abrigo (Ligero)": true
