@@ -1636,10 +1636,12 @@
       "Pantalones vaqueros": true,
       "Pantalones chinos": true,
       "Jersey": true,
-      "Cinturon": true
+      "Cinturon": true,
+      "Chubasquero": false
     },
     "excluded": {
-      "Abrigo (Ligero)": true
+      "Abrigo (Ligero)": true,
+      "Chubasquero": true
     },
     "qty": {
       "Camisa de trabajo": 3,
