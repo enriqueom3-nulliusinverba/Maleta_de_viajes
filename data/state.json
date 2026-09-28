@@ -1677,13 +1677,15 @@
       "Cartera": true,
       "Gafas de sol": true,
       "Almohada viaje (funda)": false,
-      "Paraguas": true
+      "Paraguas": true,
+      "Botella": false
     },
     "excluded": {
       "Abrigo (Ligero)": true,
       "Chubasquero": true,
       "Betadine": true,
-      "Bolsa móvil": true
+      "Bolsa móvil": true,
+      "Botella": true
     },
     "qty": {
       "Camisa de trabajo": 3,
