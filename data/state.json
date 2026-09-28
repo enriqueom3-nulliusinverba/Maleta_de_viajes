@@ -1676,7 +1676,7 @@
       "Bolsa móvil": false,
       "Cartera": true,
       "Gafas de sol": true,
-      "Almohada viaje (funda)": true,
+      "Almohada viaje (funda)": false,
       "Paraguas": true
     },
     "excluded": {
