@@ -1675,7 +1675,8 @@
       "Tarjeta sanitaria Euro": true,
       "Bolsa móvil": false,
       "Cartera": true,
-      "Gafas de sol": true
+      "Gafas de sol": true,
+      "Almohada viaje (funda)": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
