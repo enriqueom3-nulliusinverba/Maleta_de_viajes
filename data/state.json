@@ -1627,7 +1627,8 @@
   ],
   "progress": {
     "packed": {
-      "Calcetines": true
+      "Calcetines": true,
+      "Calzoncillos": true
     },
     "excluded": {},
     "qty": {},
