@@ -1646,7 +1646,9 @@
       "Cacao labios": true,
       "Cepillo dientes": true,
       "Champu": true,
-      "Chubasquero do pito": true
+      "Chubasquero do pito": true,
+      "Colonia": true,
+      "Desodorante": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
