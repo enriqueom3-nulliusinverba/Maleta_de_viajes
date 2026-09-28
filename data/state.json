@@ -1654,11 +1654,13 @@
       "Tapones": true,
       "Tapones loop": true,
       "Toalla baño": true,
-      "toallitas humedas": true
+      "toallitas humedas": true,
+      "Betadine": false
     },
     "excluded": {
       "Abrigo (Ligero)": true,
-      "Chubasquero": true
+      "Chubasquero": true,
+      "Betadine": true
     },
     "qty": {
       "Camisa de trabajo": 3,
