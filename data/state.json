@@ -1663,7 +1663,8 @@
       "Med | Lactosa": true,
       "Med | Dormir": true,
       "Med | Ibuprofeno": true,
-      "Med | Omeprazol": true
+      "Med | Omeprazol": true,
+      "Termómetro": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
