@@ -1631,7 +1631,8 @@
       "Calzoncillos": true,
       "Camisa de trabajo": true,
       "Abrigo (Ligero)": false,
-      "Sudadera & Polar": true
+      "Sudadera & Polar": true,
+      "Zapatos": true
     },
     "excluded": {
       "Abrigo (Ligero)": true
