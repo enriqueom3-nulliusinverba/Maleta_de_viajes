@@ -1626,7 +1626,9 @@
     }
   ],
   "progress": {
-    "packed": {},
+    "packed": {
+      "Calcetines": true
+    },
     "excluded": {},
     "qty": {},
     "showPacked": {},
