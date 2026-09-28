@@ -1674,7 +1674,8 @@
       "DNI": true,
       "Tarjeta sanitaria Euro": true,
       "Bolsa móvil": false,
-      "Cartera": true
+      "Cartera": true,
+      "Gafas de sol": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
