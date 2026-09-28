@@ -1641,7 +1641,8 @@
       "Deportivas": true,
       "Camiseta": true,
       "Pijama": true,
-      "Chanclas": true
+      "Chanclas": true,
+      "Antifaz": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
