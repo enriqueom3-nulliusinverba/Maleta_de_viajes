@@ -1631,7 +1631,9 @@
       "Calzoncillos": true
     },
     "excluded": {},
-    "qty": {},
+    "qty": {
+      "Camisa de trabajo": 3
+    },
     "showPacked": {},
     "showExcluded": {}
   },
