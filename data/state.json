@@ -1653,7 +1653,8 @@
       "Pasta dientes": true,
       "Tapones": true,
       "Tapones loop": true,
-      "Toalla baño": true
+      "Toalla baño": true,
+      "toallitas humedas": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
