@@ -1666,7 +1666,8 @@
       "Med | Omeprazol": true,
       "Termómetro": true,
       "Cargador USB C": true,
-      "Ebook": true
+      "Ebook": true,
+      "Portatil": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
