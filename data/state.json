@@ -1637,7 +1637,8 @@
       "Pantalones chinos": true,
       "Jersey": true,
       "Cinturon": true,
-      "Chubasquero": false
+      "Chubasquero": false,
+      "Deportivas": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
