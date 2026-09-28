@@ -1655,7 +1655,9 @@
       "Tapones loop": true,
       "Toalla baño": true,
       "toallitas humedas": true,
-      "Betadine": false
+      "Betadine": false,
+      "Gel hidroalcohólico": true,
+      "Inhalador": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
