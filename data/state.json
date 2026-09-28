@@ -1638,7 +1638,9 @@
       "Jersey": true,
       "Cinturon": true,
       "Chubasquero": false,
-      "Deportivas": true
+      "Deportivas": true,
+      "Camiseta": true,
+      "Pijama": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
