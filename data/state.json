@@ -1635,7 +1635,8 @@
       "Zapatos": true,
       "Pantalones vaqueros": true,
       "Pantalones chinos": true,
-      "Jersey": true
+      "Jersey": true,
+      "Cinturon": true
     },
     "excluded": {
       "Abrigo (Ligero)": true
