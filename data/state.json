@@ -1659,7 +1659,11 @@
       "Gel hidroalcohólico": true,
       "Inhalador": true,
       "Mascarillas": true,
-      "Med | Alergia": true
+      "Med | Alergia": true,
+      "Med | Lactosa": true,
+      "Med | Dormir": true,
+      "Med | Ibuprofeno": true,
+      "Med | Omeprazol": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
