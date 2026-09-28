@@ -1640,7 +1640,8 @@
       "Chubasquero": false,
       "Deportivas": true,
       "Camiseta": true,
-      "Pijama": true
+      "Pijama": true,
+      "Chanclas": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
