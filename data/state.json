@@ -1692,7 +1692,9 @@
       "Deportivas": 1,
       "Camiseta": 2
     },
-    "showPacked": {},
+    "showPacked": {
+      "Botiquin": true
+    },
     "showExcluded": {}
   },
   "trip": {
