@@ -1665,7 +1665,8 @@
       "Med | Ibuprofeno": true,
       "Med | Omeprazol": true,
       "Termómetro": true,
-      "Cargador USB C": true
+      "Cargador USB C": true,
+      "Ebook": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
