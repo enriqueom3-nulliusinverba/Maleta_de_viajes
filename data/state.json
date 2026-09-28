@@ -1695,7 +1695,7 @@
     "showPacked": {
       "Botiquin": true,
       "Varios": true,
-      "Digital": true
+      "Digital": false
     },
     "showExcluded": {
       "Aventura": false
