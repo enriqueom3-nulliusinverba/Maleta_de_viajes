@@ -1648,7 +1648,9 @@
       "Champu": true,
       "Chubasquero do pito": true,
       "Colonia": true,
-      "Desodorante": true
+      "Desodorante": true,
+      "Goma pelo": true,
+      "Pasta dientes": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
