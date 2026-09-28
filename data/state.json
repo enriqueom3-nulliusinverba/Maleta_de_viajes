@@ -1671,7 +1671,8 @@
       "Power hub": true,
       "Carnet conducir": true,
       "Credit card": true,
-      "DNI": true
+      "DNI": true,
+      "Tarjeta sanitaria Euro": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
