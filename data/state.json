@@ -1629,9 +1629,12 @@
     "packed": {
       "Calcetines": true,
       "Calzoncillos": true,
-      "Camisa de trabajo": true
+      "Camisa de trabajo": true,
+      "Abrigo (Ligero)": false
     },
-    "excluded": {},
+    "excluded": {
+      "Abrigo (Ligero)": true
+    },
     "qty": {
       "Camisa de trabajo": 3
     },
