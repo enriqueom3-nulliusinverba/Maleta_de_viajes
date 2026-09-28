@@ -1650,7 +1650,9 @@
       "Colonia": true,
       "Desodorante": true,
       "Goma pelo": true,
-      "Pasta dientes": true
+      "Pasta dientes": true,
+      "Tapones": true,
+      "Tapones loop": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
