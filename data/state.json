@@ -1673,7 +1673,8 @@
       "Credit card": true,
       "DNI": true,
       "Tarjeta sanitaria Euro": true,
-      "Bolsa móvil": false
+      "Bolsa móvil": false,
+      "Cartera": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
