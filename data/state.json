@@ -1634,14 +1634,16 @@
       "Sudadera & Polar": true,
       "Zapatos": true,
       "Pantalones vaqueros": true,
-      "Pantalones chinos": true
+      "Pantalones chinos": true,
+      "Jersey": true
     },
     "excluded": {
       "Abrigo (Ligero)": true
     },
     "qty": {
       "Camisa de trabajo": 3,
-      "Pantalones vaqueros": 1
+      "Pantalones vaqueros": 1,
+      "Jersey": 1
     },
     "showPacked": {},
     "showExcluded": {}
