@@ -1693,7 +1693,8 @@
       "Camiseta": 2
     },
     "showPacked": {
-      "Botiquin": true
+      "Botiquin": true,
+      "Varios": true
     },
     "showExcluded": {
       "Aventura": false
