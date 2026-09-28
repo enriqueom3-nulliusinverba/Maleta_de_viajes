@@ -1695,7 +1695,9 @@
     "showPacked": {
       "Botiquin": true
     },
-    "showExcluded": {}
+    "showExcluded": {
+      "Aventura": false
+    }
   },
   "trip": {
     "f-place": "Roma",
