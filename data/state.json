@@ -1657,7 +1657,9 @@
       "toallitas humedas": true,
       "Betadine": false,
       "Gel hidroalcohólico": true,
-      "Inhalador": true
+      "Inhalador": true,
+      "Mascarillas": true,
+      "Med | Alergia": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
