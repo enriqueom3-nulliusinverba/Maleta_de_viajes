@@ -1682,7 +1682,8 @@
       "Movil": true,
       "Ipad": true,
       "Auriculares": true,
-      "Reloj": true
+      "Reloj": true,
+      "Almohada viaje": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
