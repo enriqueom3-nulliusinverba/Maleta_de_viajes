@@ -1680,7 +1680,9 @@
       "Paraguas": true,
       "Botella": false,
       "Movil": true,
-      "Ipad": true
+      "Ipad": true,
+      "Auriculares": true,
+      "Reloj": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
