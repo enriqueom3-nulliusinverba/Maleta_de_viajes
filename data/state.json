@@ -1678,7 +1678,9 @@
       "Gafas de sol": true,
       "Almohada viaje (funda)": false,
       "Paraguas": true,
-      "Botella": false
+      "Botella": false,
+      "Movil": true,
+      "Ipad": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
