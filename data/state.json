@@ -1676,14 +1676,15 @@
       "Bolsa móvil": false,
       "Cartera": true,
       "Gafas de sol": true,
-      "Almohada viaje (funda)": false,
+      "Almohada viaje (funda)": true,
       "Paraguas": true,
       "Botella": false,
       "Movil": true,
       "Ipad": true,
       "Auriculares": true,
       "Reloj": true,
-      "Almohada viaje": true
+      "Almohada viaje": true,
+      "Gafas ver": true
     },
     "excluded": {
       "Abrigo (Ligero)": true,
